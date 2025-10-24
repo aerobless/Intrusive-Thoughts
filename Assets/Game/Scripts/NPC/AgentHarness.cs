@@ -5,20 +5,50 @@ namespace Synty.AnimationBaseLocomotion.Samples
 {
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(Animator))]
-    public class NpcAdvancedAnimationController : MonoBehaviour
+    [RequireComponent(typeof(AgentTextOutput))]
+    public class AgentHarness : MonoBehaviour
     {
         [Header("Navigation")]
-        public float wanderRadius = 10f;
-        public float wanderInterval = 5f;
         public float rotationSpeed = 6f;
+        public float arrivalThreshold = 0.3f;
 
         [Header("Animation thresholds")]
         public float walkThreshold = 0.2f;
         public float runThreshold = 1.2f;
 
-        NavMeshAgent agent;
+        NavMeshAgent navmeshAgent;
         Animator anim;
-        float timer;
+        AgentTextOutput textOutput;
+        GameObject currentTarget;
+
+        public bool IsIdle
+        {
+            get
+            {
+                if (navmeshAgent == null)
+                    return true;
+
+                if (currentTarget != null)
+                    return false;
+
+                if (navmeshAgent.pathPending)
+                    return false;
+
+                if (navmeshAgent.hasPath && navmeshAgent.remainingDistance > Mathf.Max(navmeshAgent.stoppingDistance, arrivalThreshold))
+                    return false;
+
+                return navmeshAgent.velocity.sqrMagnitude < 0.01f;
+            }
+        }
+
+        public AgentTextOutput TextOutput
+        {
+            get
+            {
+                EnsureComponents();
+                return textOutput;
+            }
+        }
 
         // Animator hashes (from your screenshot)
         static readonly int MoveSpeed = Animator.StringToHash("MoveSpeed");
@@ -34,34 +64,86 @@ namespace Synty.AnimationBaseLocomotion.Samples
         static readonly int MovementInputHeld = Animator.StringToHash("MovementInputHeld");
         static readonly int MovementInputTapped = Animator.StringToHash("MovementInputTapped");
 
+        void EnsureComponents()
+        {
+            if (navmeshAgent == null)
+                navmeshAgent = GetComponent<NavMeshAgent>();
+            if (anim == null)
+                anim = GetComponent<Animator>();
+            if (textOutput == null)
+                textOutput = GetComponent<AgentTextOutput>();
+        }
+
+        void Awake()
+        {
+            EnsureComponents();
+        }
+
         void Start()
         {
-            agent = GetComponent<NavMeshAgent>();
-            anim = GetComponent<Animator>();
-            timer = wanderInterval;
+            EnsureComponents();
 
             // Initialize
             anim.SetBool(IsGrounded, true);
             anim.SetBool(IsStopped, true);
             anim.SetBool(IsStarting, false);
             anim.SetFloat(FallingDuration, 0f);
+
+            ResetSequence();
         }
 
         void Update()
         {
-            timer += Time.deltaTime;
-            if (timer >= wanderInterval)
-            {
-                agent.SetDestination(RandomNavSphere(transform.position, wanderRadius));
-                timer = 0f;
-            }
-
+            HandleNavigation();
             UpdateAnimation();
+        }
+
+        void HandleNavigation()
+        {
+            EnsureComponents();
+            if (navmeshAgent == null)
+                return;
+
+            if (currentTarget == null)
+                return;
+
+            navmeshAgent.SetDestination(currentTarget.transform.position);
+
+            if (!HasArrivedAtDestination())
+                return;
+
+            navmeshAgent.isStopped = true;
+            navmeshAgent.ResetPath();
+
+            currentTarget = null;
+        }
+
+        bool HasArrivedAtDestination()
+        {
+            if (navmeshAgent == null)
+                return false;
+
+            if (navmeshAgent.pathPending || currentTarget == null)
+                return false;
+
+            float threshold = Mathf.Max(navmeshAgent.stoppingDistance, arrivalThreshold);
+            if (navmeshAgent.remainingDistance > threshold)
+                return false;
+
+            // Ensure the agent has essentially come to a stop
+            if (navmeshAgent.hasPath && navmeshAgent.velocity.sqrMagnitude > 0.01f)
+                return false;
+
+            return true;
         }
 
         void UpdateAnimation()
         {
-            Vector3 velocity = agent.velocity;
+            EnsureComponents();
+            if (navmeshAgent == null || anim == null)
+                return;
+
+            Vector3 velocity = navmeshAgent.velocity;
             float speed = velocity.magnitude;
             bool isMoving = speed > 0.05f;
 
@@ -100,12 +182,24 @@ namespace Synty.AnimationBaseLocomotion.Samples
             }
         }
 
-        static Vector3 RandomNavSphere(Vector3 origin, float distance)
+        void ResetSequence()
         {
-            Vector3 random = Random.insideUnitSphere * distance + origin;
-            if (NavMesh.SamplePosition(random, out var hit, distance, NavMesh.AllAreas))
-                return hit.position;
-            return origin;
+            currentTarget = null;
+            navmeshAgent.isStopped = true;
+            navmeshAgent.ResetPath();
+        }
+
+        public void WalkTo(GameObject target)
+        {
+            if (target == null)
+            {
+                Debug.LogWarning("AgentHarness: Attempted to walk to a null target.");
+                return;
+            }
+
+            currentTarget = target;
+            navmeshAgent.isStopped = false;
+            navmeshAgent.SetDestination(currentTarget.transform.position);
         }
     }
 }
