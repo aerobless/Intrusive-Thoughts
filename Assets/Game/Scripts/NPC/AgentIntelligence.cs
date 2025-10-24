@@ -88,7 +88,7 @@ public class AgentIntelligence : MonoBehaviour
                 return;
             }
 
-            var request = BuildChatRequest(targets.Select(t => t.name));
+            var request = BuildChatRequest(targets);
             var response = await client.ChatEndpoint.GetCompletionAsync(request);
             var decision = ExtractDecision(response);
             if (decision == null)
@@ -102,7 +102,7 @@ public class AgentIntelligence : MonoBehaviour
             }
 
             PresentThoughts(decision.thoughts);
-            DriveAgent(decision.target, targets);
+            DriveAgent(decision.target);
         }
         catch (Exception ex)
         {
@@ -202,16 +202,15 @@ public class AgentIntelligence : MonoBehaviour
         decisionCheckInterval = Mathf.Max(0.1f, decisionCheckInterval);
     }
 
-    List<GameObject> CollectTargets()
+    List<AgentDescription> CollectTargets()
     {
         return FindObjectsByType<AgentDescription>(FindObjectsSortMode.None)
-            .Select(desc => desc.gameObject)
             .ToList();
     }
 
-    ChatRequest BuildChatRequest(IEnumerable<string> targetNames)
+    ChatRequest BuildChatRequest(List<AgentDescription> world)
     {
-        var targetsArray = targetNames.ToArray();
+        var targetsArray = describeWorld(world);
         string targetsText = string.Join(", ", targetsArray);
         string systemPrompt =
             "You control a 3D character in a Unity demo. " +
@@ -219,7 +218,7 @@ public class AgentIntelligence : MonoBehaviour
         string userPrompt = $"Available targets: {targetsText}. " +
             "Call the select_destination tool with the exact target name and a short explanation.";
 
-        var function = BuildSelectionFunction(targetsArray);
+        var function = BuildSelectionFunction(world.Select(t => t.name));
         var tool = new Tool(function);
 
         return new ChatRequest(
@@ -232,6 +231,16 @@ public class AgentIntelligence : MonoBehaviour
             toolChoice: "auto",
             model: chatModel
         );
+    }
+
+    string describeWorld(List<AgentDescription> world)
+    {
+        var descriptions = world
+            .Where(a => a != null && !string.IsNullOrWhiteSpace(a.description))
+            .Select(a => $"- Name: {a.name}  Description: {a.description.Trim()}")
+            .ToArray();
+
+        return string.Join("\n", descriptions);
     }
 
     Function BuildSelectionFunction(IEnumerable<string> targetNames)
@@ -379,7 +388,7 @@ public class AgentIntelligence : MonoBehaviour
             textOutput.ShowSpeech(thoughts);
     }
 
-    void DriveAgent(string targetName, IReadOnlyCollection<GameObject> targets)
+    void DriveAgent(string targetName)
     {
         if (string.IsNullOrWhiteSpace(targetName))
         {
@@ -387,16 +396,6 @@ public class AgentIntelligence : MonoBehaviour
             return;
         }
 
-        var target = targets.FirstOrDefault(t =>
-            t != null && string.Equals(t.name, targetName, StringComparison.OrdinalIgnoreCase));
-
-        if (target != null)
-        {
-            harness.WalkTo(target);
-            return;
-        }
-
-        Debug.LogWarning($"AgentIntelligence could not find target '{targetName}' among provided objects; asking harness to locate it globally.");
         walkToTool.WalkTo(targetName.Trim());
     }
 }
