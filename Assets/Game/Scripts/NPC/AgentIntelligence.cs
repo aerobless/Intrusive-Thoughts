@@ -11,6 +11,7 @@ using UnityEngine;
 using Synty.AnimationBaseLocomotion.Samples;
 
 [RequireComponent(typeof(AgentHarness))]
+[RequireComponent(typeof(AgentPerception))]
 public class AgentIntelligence : MonoBehaviour
 {
     [Header("Learning")]
@@ -22,6 +23,7 @@ public class AgentIntelligence : MonoBehaviour
     const string SelectDestinationFunctionName = "select_destination";
 
     AgentHarness harness;
+    AgentPerception agentPerception;
     OpenAIClient client;
     bool decisionInProgress;
     CancellationTokenSource decisionLoopCts;
@@ -39,7 +41,7 @@ public class AgentIntelligence : MonoBehaviour
     void Awake()
     {
         harness = GetComponent<AgentHarness>();
-
+        agentPerception = GetComponent<AgentPerception>(); 
         walkToTool = new AgentWalkTool(harness);
     }
 
@@ -204,8 +206,9 @@ public class AgentIntelligence : MonoBehaviour
 
     List<AgentDescription> CollectTargets()
     {
-        return FindObjectsByType<AgentDescription>(FindObjectsSortMode.None)
-            .ToList();
+        var visibleTargets = agentPerception.VisibleTargets.ToList();
+        Debug.Log("Visible targets: " + string.Join(", ", visibleTargets.Select(t => t.name)));
+        return visibleTargets;
     }
 
     ChatRequest BuildChatRequest(List<AgentDescription> world)
