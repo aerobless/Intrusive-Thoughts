@@ -14,8 +14,11 @@ using Synty.AnimationBaseLocomotion.Samples;
 [RequireComponent(typeof(AgentPerception))]
 public class AgentIntelligence : MonoBehaviour
 {
-    [Header("Learning")]
-    [SerializeField] string chatModel = "gpt-4.1-mini";
+    [Header("Agent Details")]
+
+    [SerializeField, TextArea(5, 20)]
+    public string characterPrompt;
+
     [SerializeField, Min(0.1f)] float decisionCheckInterval = 0.75f;
 
     [Header("Navigation targets")]
@@ -30,6 +33,8 @@ public class AgentIntelligence : MonoBehaviour
     Task decisionLoopTask;
     bool missingKeyLogged;
     AgentWalkTool walkToTool;
+
+    PromptBuilder promptBuilder = new();
 
     [Serializable]
     class NavigationDecision
@@ -90,7 +95,7 @@ public class AgentIntelligence : MonoBehaviour
                 return;
             }
 
-            var request = BuildChatRequest(targets);
+            var request = promptBuilder.BuildChatRequest(targets, characterPrompt);
             var response = await client.ChatEndpoint.GetCompletionAsync(request);
             var decision = ExtractDecision(response);
             if (decision == null)
@@ -209,73 +214,6 @@ public class AgentIntelligence : MonoBehaviour
         var visibleTargets = agentPerception.VisibleTargets.ToList();
         Debug.Log("Visible targets: " + string.Join(", ", visibleTargets.Select(t => t.name)));
         return visibleTargets;
-    }
-
-    ChatRequest BuildChatRequest(List<AgentDescription> world)
-    {
-        var targetsArray = describeWorld(world);
-        string targetsText = string.Join(", ", targetsArray);
-        string systemPrompt =
-            "You control a 3D character in a Unity demo. " +
-            "Always choose destinations by calling the provided select_destination tool.";
-        string userPrompt = $"Available targets: {targetsText}. " +
-            "Call the select_destination tool with the exact target name and a short explanation.";
-
-        var function = BuildSelectionFunction(world.Select(t => t.name));
-        var tool = new Tool(function);
-
-        return new ChatRequest(
-            new[]
-            {
-                new Message(Role.System, systemPrompt),
-                new Message(Role.User, userPrompt)
-            },
-            new[] { tool },
-            toolChoice: "auto",
-            model: chatModel
-        );
-    }
-
-    string describeWorld(List<AgentDescription> world)
-    {
-        var descriptions = world
-            .Where(a => a != null && !string.IsNullOrWhiteSpace(a.description))
-            .Select(a => $"- Name: {a.name}  Description: {a.description.Trim()}")
-            .ToArray();
-
-        return string.Join("\n", descriptions);
-    }
-
-    Function BuildSelectionFunction(IEnumerable<string> targetNames)
-    {
-        var names = targetNames.Where(n => !string.IsNullOrWhiteSpace(n)).Distinct().ToArray();
-        var enumArray = new JArray(names);
-        var parameters = new JObject
-        {
-            ["type"] = "object",
-            ["properties"] = new JObject
-            {
-                ["target"] = new JObject
-                {
-                    ["type"] = "string",
-                    ["description"] = "Exact name of the target to visit next.",
-                    ["enum"] = enumArray
-                },
-                ["thoughts"] = new JObject
-                {
-                    ["type"] = "string",
-                    ["description"] = "Short sentence explaining why this target was chosen."
-                }
-            },
-            ["required"] = new JArray("target", "thoughts"),
-            ["additionalProperties"] = false
-        };
-
-        return new Function(
-            SelectDestinationFunctionName,
-            "Selects the next navigation target for the character and states the reasoning.",
-            parameters,
-            strict: true);
     }
 
     string ExtractContent(ChatResponse response)
