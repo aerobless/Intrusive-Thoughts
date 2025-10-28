@@ -7941,6 +7941,73 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5918245903813878383, guid: b592357becacd48d58a4d143d44b69ba, type: 3}
   m_PrefabInstance: {fileID: 979241048}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &988714059
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1962141152}
+    m_Modifications:
+    - target: {fileID: 1525139748467091410, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_Name
+      value: Colin Page Office
+      objectReference: {fileID: 0}
+    - target: {fileID: 3034791577294182266, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: description
+      value: The personal office of Colin Page. He's the manager of Printer Supply
+        Co.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.8036704
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.21174
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.2995405
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+--- !u!4 &988714060 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+  m_PrefabInstance: {fileID: 988714059}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &993418385 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9109319861826836309, guid: 7672a430d09954312bc1ef8816e1f98a, type: 3}
@@ -9537,10 +9604,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0effd000e9a4b8dba9a46804493e00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AgentIntelligence
-  characterPrompt: You are Colin Page, the manager of "Printer Supply Co.". It is
+  characterPrompt: 'You are Colin Page, the manager of "Printer Supply Co.". It is
     your job to make sure that everything runs smoothly in the office. You also enjoy
     drinking coffee and talking to the receptionist. You have a single office room
     to yourself.
+
+
+    Currently you are alone in the office. There is noone to talk
+    to. Try to make a plan where you want to go and then visit these places. pretend
+    to do some work and move on to the next place. Try to find your single office'
   decisionCheckInterval: 0.75
 --- !u!114 &1180665921
 MonoBehaviour:
@@ -13117,6 +13189,72 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3440747832749170819, guid: 35691597735d0461a93019d7b32eaacd, type: 3}
   m_PrefabInstance: {fileID: 1566126625}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1567398547
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1962141152}
+    m_Modifications:
+    - target: {fileID: 1525139748467091410, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_Name
+      value: Reception Area
+      objectReference: {fileID: 0}
+    - target: {fileID: 3034791577294182266, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: description
+      value: The front of the reception area. A good location to talk with the receptionist.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 10.303671
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.21174
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.7995405
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+--- !u!4 &1567398548 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+  m_PrefabInstance: {fileID: 1567398547}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1580447929
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14356,6 +14494,72 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5918245903813878383, guid: b592357becacd48d58a4d143d44b69ba, type: 3}
   m_PrefabInstance: {fileID: 1713136167}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1714737974
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1962141152}
+    m_Modifications:
+    - target: {fileID: 1525139748467091410, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_Name
+      value: Meeting Room
+      objectReference: {fileID: 0}
+    - target: {fileID: 3034791577294182266, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: description
+      value: A meeting room.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.30366993
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.21174
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.2995405
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+--- !u!4 &1714737975 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+  m_PrefabInstance: {fileID: 1714737974}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1715629776
 PrefabInstance:
@@ -15959,6 +16163,72 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 663604628260816012, guid: 3fc7fa04b48234094997764fd59c92c4, type: 3}
   m_PrefabInstance: {fileID: 1854105832}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1854267038
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1962141152}
+    m_Modifications:
+    - target: {fileID: 1525139748467091410, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_Name
+      value: Men's Toilet
+      objectReference: {fileID: 0}
+    - target: {fileID: 3034791577294182266, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: description
+      value: The men's washroom and toilets.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -10.69633
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.21174
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.7004595
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+--- !u!4 &1854267039 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+  m_PrefabInstance: {fileID: 1854267038}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1857553155
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16985,6 +17255,72 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 280e6a895db3b4ffe8b671183ef4c64a, type: 2}
   m_BuildHeightMesh: 0
+--- !u!1001 &1925362937
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1962141152}
+    m_Modifications:
+    - target: {fileID: 1525139748467091410, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_Name
+      value: Women's Toilet
+      objectReference: {fileID: 0}
+    - target: {fileID: 3034791577294182266, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: description
+      value: The women's washroom and toilet.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -13.69633
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.21174
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.2004595
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+--- !u!4 &1925362938 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+  m_PrefabInstance: {fileID: 1925362937}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1929267615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17165,6 +17501,43 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5918245903813878383, guid: b592357becacd48d58a4d143d44b69ba, type: 3}
   m_PrefabInstance: {fileID: 1954209276}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1962141151
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1962141152}
+  m_Layer: 0
+  m_Name: Rooms & Locations
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1962141152
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1962141151}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.19818, y: 1.21174, z: 9.95427}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 988127901574078182}
+  - {fileID: 1567398548}
+  - {fileID: 988714060}
+  - {fileID: 1714737975}
+  - {fileID: 1854267039}
+  - {fileID: 1925362938}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1973457106
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18855,6 +19228,72 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4879546589801216712, guid: dfe19eedd3c9a4ab4aa5a85fb6c041ad, type: 3}
   m_PrefabInstance: {fileID: 471389796221586675}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &988127901574078181
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1962141152}
+    m_Modifications:
+    - target: {fileID: 1525139748467091410, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_Name
+      value: Entrance
+      objectReference: {fileID: 0}
+    - target: {fileID: 3034791577294182266, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: description
+      value: The entrance to the office
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 10.303671
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.21174
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8.7995405
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+--- !u!4 &988127901574078182 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8462933793863747471, guid: 7ebe71bd7218248b5b9652e7f6755ace, type: 3}
+  m_PrefabInstance: {fileID: 988127901574078181}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1102080180364993857
 PrefabInstance:
@@ -21009,3 +21448,4 @@ SceneRoots:
   - {fileID: 1495878235}
   - {fileID: 1155283109}
   - {fileID: 1841108461}
+  - {fileID: 1962141152}

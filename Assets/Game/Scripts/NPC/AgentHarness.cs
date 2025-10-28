@@ -21,6 +21,8 @@ namespace Synty.AnimationBaseLocomotion.Samples
         AgentTextOutput textOutput;
         GameObject currentTarget;
 
+        public GameObject CurrentTarget => currentTarget;
+
         public bool IsIdle
         {
             get
@@ -200,6 +202,16 @@ namespace Synty.AnimationBaseLocomotion.Samples
             currentTarget = target;
             navmeshAgent.isStopped = false;
             navmeshAgent.SetDestination(currentTarget.transform.position);
+        }
+
+        public void ClearDestination()
+        {
+            if (currentTarget == null || navmeshAgent == null)
+                return;
+
+            navmeshAgent.isStopped = true;
+            navmeshAgent.ResetPath();
+            currentTarget = null;
         }
     }
 }

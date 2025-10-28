@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenAI;
-using OpenAI.Chat;
+using OpenAI.Responses;
 using UnityEngine;
 using Synty.AnimationBaseLocomotion.Samples;
+using ResponseMessage = OpenAI.Responses.Message;
+using ResponseTextContent = OpenAI.Responses.TextContent;
 
 [RequireComponent(typeof(AgentHarness))]
 [RequireComponent(typeof(AgentPerception))]
@@ -24,6 +26,7 @@ public class AgentIntelligence : MonoBehaviour
     [Header("Navigation targets")]
 
     const string SelectDestinationFunctionName = "select_destination";
+    const string SpeakFunctionName = "speak";
 
     AgentHarness harness;
     AgentPerception agentPerception;
@@ -35,6 +38,10 @@ public class AgentIntelligence : MonoBehaviour
     AgentWalkTool walkToTool;
 
     PromptBuilder promptBuilder = new();
+    readonly List<ResponseMessage> conversationHistory = new();
+    const int MaxHistoryEntries = 3;
+    string pendingArrivalTarget;
+    readonly List<LocationDescription> cachedLocations = new();
 
     [Serializable]
     class NavigationDecision
@@ -48,6 +55,7 @@ public class AgentIntelligence : MonoBehaviour
         harness = GetComponent<AgentHarness>();
         agentPerception = GetComponent<AgentPerception>(); 
         walkToTool = new AgentWalkTool(harness);
+        CacheKnownLocations();
     }
 
     async void Start()
@@ -75,6 +83,8 @@ public class AgentIntelligence : MonoBehaviour
         if (decisionInProgress || !CanRequestDecision())
             return;
 
+        RecordArrivalIfNeeded();
+
         decisionInProgress = true;
 
         try
@@ -95,9 +105,23 @@ public class AgentIntelligence : MonoBehaviour
                 return;
             }
 
-            var request = promptBuilder.BuildChatRequest(targets, characterPrompt);
-            var response = await client.ChatEndpoint.GetCompletionAsync(request);
-            var decision = ExtractDecision(response);
+            var locations = CollectLocations();
+
+            var request = promptBuilder.BuildResponseRequest(targets, locations, characterPrompt, conversationHistory);
+            var response = await client.ResponsesEndpoint.CreateModelResponseAsync(request);
+
+            var speechOutputs = new List<string>();
+            var decision = ExtractDecision(response, speechOutputs);
+
+            if (speechOutputs.Count > 0)
+            {
+                foreach (var speech in speechOutputs)
+                {
+                    DisplaySpeech(speech);
+                    RecordHistory(speech);
+                }
+            }
+
             if (decision == null)
             {
                 var fallback = ExtractContent(response);
@@ -108,7 +132,15 @@ public class AgentIntelligence : MonoBehaviour
                 }
             }
 
-            PresentThoughts(decision.thoughts);
+            if (decision == null)
+                return;
+
+            if (speechOutputs.Count == 0)
+            {
+                DisplaySpeech(decision.thoughts);
+            }
+
+            RecordHistory(decision.thoughts);
             DriveAgent(decision.target);
         }
         catch (Exception ex)
@@ -204,6 +236,20 @@ public class AgentIntelligence : MonoBehaviour
         return true;
     }
 
+    void RecordArrivalIfNeeded()
+    {
+        if (string.IsNullOrEmpty(pendingArrivalTarget))
+            return;
+        if (harness == null)
+            return;
+        if (!harness.IsIdle)
+            return;
+
+        var message = $"You have reached \"{pendingArrivalTarget}\".";
+        RecordSystemHistory(message);
+        pendingArrivalTarget = null;
+    }
+
     void OnValidate()
     {
         decisionCheckInterval = Mathf.Max(0.1f, decisionCheckInterval);
@@ -216,30 +262,78 @@ public class AgentIntelligence : MonoBehaviour
         return visibleTargets;
     }
 
-    string ExtractContent(ChatResponse response)
+    void CacheKnownLocations()
     {
-        if (response == null || response.FirstChoice == null)
-            return string.Empty;
-
-        var message = response.FirstChoice.Message;
-        if (message.Content is string s)
-            return s.Trim();
-
-        return message.Content?.ToString().Trim() ?? string.Empty;
+        cachedLocations.Clear();
+        cachedLocations.AddRange(FindObjectsByType<LocationDescription>(FindObjectsInactive.Exclude, FindObjectsSortMode.None));
+        cachedLocations.RemoveAll(location => location == null);
+        cachedLocations.Sort((a, b) => string.Compare(a.name, b.name, StringComparison.OrdinalIgnoreCase));
     }
 
-    NavigationDecision ExtractDecision(ChatResponse response)
+    List<LocationDescription> CollectLocations()
     {
-        var toolCalls = response?.FirstChoice?.Message?.ToolCalls;
-        if (toolCalls == null || toolCalls.Count == 0)
+        CacheKnownLocations();
+        return new List<LocationDescription>(cachedLocations);
+    }
+
+    string ExtractContent(Response response)
+    {
+        if (response == null)
+            return string.Empty;
+
+        if (!string.IsNullOrWhiteSpace(response.OutputText))
+            return response.OutputText.Trim();
+
+        if (response.Output == null)
+            return string.Empty;
+
+        foreach (var item in response.Output)
+        {
+            if (item is not ResponseMessage message || message.Role != Role.Assistant || message.Content == null)
+                continue;
+
+            foreach (var content in message.Content)
+            {
+                if (content is ResponseTextContent textContent)
+                {
+                    var text = textContent.ToString();
+                    if (!string.IsNullOrWhiteSpace(text))
+                        return text.Trim();
+                }
+            }
+        }
+
+        return string.Empty;
+    }
+
+    NavigationDecision ExtractDecision(Response response, List<string> speechOutputs)
+    {
+        if (response?.Output == null)
             return null;
 
-        foreach (var toolCall in toolCalls)
+        NavigationDecision decision = null;
+
+        foreach (var item in response.Output)
         {
-            if (!string.Equals(toolCall.Name, SelectDestinationFunctionName, StringComparison.OrdinalIgnoreCase))
+            if (item is not FunctionToolCall toolCall)
                 continue;
 
             var arguments = NormalizeArguments(toolCall.Arguments);
+
+            if (string.Equals(toolCall.Name, SpeakFunctionName, StringComparison.OrdinalIgnoreCase))
+            {
+                var text = arguments?.Value<string>("text");
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    speechOutputs?.Add(text.Trim());
+                }
+
+                continue;
+            }
+
+            if (!string.Equals(toolCall.Name, SelectDestinationFunctionName, StringComparison.OrdinalIgnoreCase))
+                continue;
+
             if (arguments == null)
                 continue;
 
@@ -248,16 +342,19 @@ public class AgentIntelligence : MonoBehaviour
                 continue;
 
             var thoughts = arguments.Value<string>("thoughts");
-            return new NavigationDecision
+            if (decision == null)
             {
-                target = target.Trim(),
-                thoughts = string.IsNullOrWhiteSpace(thoughts)
-                    ? $"Heading to {target.Trim()}."
-                    : thoughts.Trim()
-            };
+                decision = new NavigationDecision
+                {
+                    target = target.Trim(),
+                    thoughts = string.IsNullOrWhiteSpace(thoughts)
+                        ? $"Heading to {target.Trim()}."
+                        : thoughts.Trim()
+                };
+            }
         }
 
-        return null;
+        return decision;
     }
 
     JToken NormalizeArguments(JToken arguments)
@@ -318,15 +415,15 @@ public class AgentIntelligence : MonoBehaviour
         return true;
     }
 
-    void PresentThoughts(string thoughts)
+    void DisplaySpeech(string message)
     {
-        if (string.IsNullOrEmpty(thoughts))
+        if (string.IsNullOrEmpty(message))
             return;
 
-        Debug.Log("AgentIntelligence thoughts: " + thoughts);
+        Debug.Log("AgentIntelligence speech: " + message);
         var textOutput = harness?.TextOutput;
         if (textOutput != null)
-            textOutput.ShowSpeech(thoughts);
+            textOutput.ShowSpeech(message);
     }
 
     void DriveAgent(string targetName)
@@ -337,6 +434,60 @@ public class AgentIntelligence : MonoBehaviour
             return;
         }
 
-        walkToTool.WalkTo(targetName.Trim());
+        string trimmedTarget = targetName.Trim();
+        walkToTool.WalkTo(trimmedTarget);
+
+        pendingArrivalTarget = harness?.CurrentTarget != null ? trimmedTarget : null;
+    }
+
+    void RecordHistory(string assistantThoughts)
+    {
+        if (string.IsNullOrWhiteSpace(assistantThoughts))
+            return;
+
+        var assistantMessage = new ResponseMessage(
+            Role.Assistant,
+            new IResponseContent[]
+            {
+                new AssistantOutputContent(assistantThoughts.Trim())
+            });
+
+        conversationHistory.Add(assistantMessage);
+
+        TrimHistory();
+    }
+
+    class AssistantOutputContent : BaseResponse, IResponseContent
+    {
+        [JsonProperty("type", DefaultValueHandling = DefaultValueHandling.Include)]
+        public ResponseContentType Type => ResponseContentType.OutputText;
+
+        [JsonProperty("text", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Text { get; }
+
+        public AssistantOutputContent(string text)
+        {
+            Text = text;
+        }
+
+        public string Object => Type.ToString();
+
+        public override string ToString() => Text ?? string.Empty;
+    }
+
+    void RecordSystemHistory(string message)
+    {
+        if (string.IsNullOrWhiteSpace(message))
+            return;
+
+        conversationHistory.Add(new ResponseMessage(Role.System, message.Trim()));
+        TrimHistory();
+    }
+
+    void TrimHistory()
+    {
+        int excess = conversationHistory.Count - MaxHistoryEntries;
+        if (excess > 0)
+            conversationHistory.RemoveRange(0, excess);
     }
 }
