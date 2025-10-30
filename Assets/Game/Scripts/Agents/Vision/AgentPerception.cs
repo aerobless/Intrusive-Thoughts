@@ -10,17 +10,19 @@ public class AgentPerception : MonoBehaviour
     [SerializeField] private float eyeHeight = 1.6f;
     [SerializeField] private float scanInterval = 0.5f;
     [SerializeField] private float memoryDuration = 5f;
-    [SerializeField, Range(1, 10)] private int visibilitySamples = 6; // new: number of points per collider to test
+    
+     // number of points per collider to test
+    [SerializeField, Range(1, 10)] private int visibilitySamples = 6;
 
     [Header("Layers")]
     [SerializeField] private LayerMask targetMask = ~0;
     [SerializeField] private LayerMask obstacleMask = ~0;
 
-    private readonly Dictionary<AgentDescription, float> _memory = new();
-    private readonly List<AgentDescription> _visibleTargets = new();
+    private readonly Dictionary<Interactable, float> _memory = new();
+    private readonly List<Interactable> _visibleInteractables = new();
 
-    public IReadOnlyList<AgentDescription> VisibleTargets => _visibleTargets;
-    public IReadOnlyCollection<AgentDescription> RememberedTargets => _memory.Keys;
+    public IReadOnlyList<Interactable> VisibleInteractables => _visibleInteractables;
+    public IReadOnlyCollection<Interactable> RememberedInteractables => _memory.Keys;
 
     void Start()
     {
@@ -36,15 +38,15 @@ public class AgentPerception : MonoBehaviour
     {
         var colliders = Physics.OverlapSphere(transform.position, visionRange, targetMask);
 
-        var uniqueTargets = new HashSet<AgentDescription>();
+        var uniqueTargets = new HashSet<Interactable>();
         foreach (var col in colliders)
         {
-            var target = col.GetComponent<AgentDescription>();
+            var target = col.GetComponent<Interactable>();
             if (target != null)
                 uniqueTargets.Add(target);
         }
 
-        _visibleTargets.Clear();
+        _visibleInteractables.Clear();
 
         var eyePos = transform.position + Vector3.up * eyeHeight;
 
@@ -60,17 +62,15 @@ public class AgentPerception : MonoBehaviour
             var angle = Vector3.Angle(transform.forward, dir);
             if (angle > fovAngle * 0.5f) continue;
 
-            var dist = Vector3.Distance(eyePos, targetCenter);
-
-            if (!IsTargetVisible(eyePos, targetCollider, dist))
-                continue;
-
-            _visibleTargets.Add(target);
-            _memory[target] = memoryDuration;
+            if (IsTargetVisible(eyePos, targetCollider))
+            {
+                _visibleInteractables.Add(target);
+                _memory[target] = memoryDuration;
+            }
         }
     }
 
-    bool IsTargetVisible(Vector3 eyePos, Collider targetCollider, float maxDistance)
+    bool IsTargetVisible(Vector3 eyePos, Collider targetCollider)
     {
         var bounds = targetCollider.bounds;
         var points = GenerateSamplePoints(bounds, visibilitySamples);
@@ -97,16 +97,18 @@ public class AgentPerception : MonoBehaviour
 
     List<Vector3> GenerateSamplePoints(Bounds b, int samples)
     {
-        var points = new List<Vector3> { b.center };
+        var points = new List<Vector3>
+        {
+            b.center,
+            // Corners of the bounding box
+            b.center + new Vector3(b.extents.x, 0, b.extents.z),
+            b.center + new Vector3(-b.extents.x, 0, b.extents.z),
+            b.center + new Vector3(b.extents.x, 0, -b.extents.z),
+            b.center + new Vector3(-b.extents.x, 0, -b.extents.z),
 
-        // Corners of the bounding box
-        points.Add(b.center + new Vector3(b.extents.x, 0, b.extents.z));
-        points.Add(b.center + new Vector3(-b.extents.x, 0, b.extents.z));
-        points.Add(b.center + new Vector3(b.extents.x, 0, -b.extents.z));
-        points.Add(b.center + new Vector3(-b.extents.x, 0, -b.extents.z));
-
-        // Top and mid-high sample
-        points.Add(b.center + Vector3.up * b.extents.y);
+            // Top and mid-high sample
+            b.center + Vector3.up * b.extents.y
+        };
         if (samples > 6)
         {
             points.Add(b.center + Vector3.up * (b.extents.y * 0.5f));
@@ -143,7 +145,7 @@ public class AgentPerception : MonoBehaviour
         foreach (var target in _memory.Keys)
         {
             if (target == null) continue;
-            Gizmos.color = _visibleTargets.Contains(target) ? Color.green : Color.gray;
+            Gizmos.color = _visibleInteractables.Contains(target) ? Color.green : Color.gray;
             Gizmos.DrawLine(eyePos, target.transform.position);
         }
     }

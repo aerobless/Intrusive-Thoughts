@@ -39,9 +39,13 @@ public class AgentIntelligence : MonoBehaviour
 
     PromptBuilder promptBuilder = new();
     readonly List<ResponseMessage> conversationHistory = new();
-    const int MaxHistoryEntries = 3;
+    const int MaxHistoryEntries = 20;
     string pendingArrivalTarget;
-    readonly List<LocationDescription> cachedLocations = new();
+    readonly List<GameLocation> cachedLocations = new();
+
+    ChatManager chatManager;
+
+    public string Name => harness != null ? harness.gameObject.name : gameObject.name;
 
     [Serializable]
     class NavigationDecision
@@ -56,6 +60,7 @@ public class AgentIntelligence : MonoBehaviour
         agentPerception = GetComponent<AgentPerception>(); 
         walkToTool = new AgentWalkTool(harness);
         CacheKnownLocations();
+        RegisterWithChatManager();
     }
 
     async void Start()
@@ -65,16 +70,25 @@ public class AgentIntelligence : MonoBehaviour
 
     void OnEnable()
     {
+        RegisterWithChatManager();
         StartDecisionLoop();
     }
 
     void OnDisable()
     {
+        var chatManager = ChatManager.Instance;
+        if (chatManager != null)
+            chatManager.UnregisterAgent(this);
+
         StopDecisionLoop();
     }
 
     void OnDestroy()
     {
+        var chatManager = ChatManager.Instance;
+        if (chatManager != null)
+            chatManager.UnregisterAgent(this);
+
         StopDecisionLoop();
     }
 
@@ -98,14 +112,13 @@ public class AgentIntelligence : MonoBehaviour
                 return;
             }
 
-            var targets = CollectTargets();
-            if (targets.Count == 0)
-            {
-                Debug.LogWarning("AgentIntelligence has no targets to offer the language model.");
-                return;
-            }
-
+            var targets = agentPerception.VisibleInteractables.ToList();
             var locations = CollectLocations();
+            if (targets.Count == 0 && locations.Count == 0)
+            {
+    
+                Debug.LogError($"AgentIntelligence: \"{Name}\" is stuck. No visible targets or known locations are available for navigation.");
+            }
 
             var request = promptBuilder.BuildResponseRequest(targets, locations, characterPrompt, conversationHistory);
             var response = await client.ResponsesEndpoint.CreateModelResponseAsync(request);
@@ -255,25 +268,18 @@ public class AgentIntelligence : MonoBehaviour
         decisionCheckInterval = Mathf.Max(0.1f, decisionCheckInterval);
     }
 
-    List<AgentDescription> CollectTargets()
-    {
-        var visibleTargets = agentPerception.VisibleTargets.ToList();
-        Debug.Log("Visible targets: " + string.Join(", ", visibleTargets.Select(t => t.name)));
-        return visibleTargets;
-    }
-
     void CacheKnownLocations()
     {
         cachedLocations.Clear();
-        cachedLocations.AddRange(FindObjectsByType<LocationDescription>(FindObjectsInactive.Exclude, FindObjectsSortMode.None));
+        cachedLocations.AddRange(FindObjectsByType<GameLocation>(FindObjectsInactive.Exclude, FindObjectsSortMode.None));
         cachedLocations.RemoveAll(location => location == null);
         cachedLocations.Sort((a, b) => string.Compare(a.name, b.name, StringComparison.OrdinalIgnoreCase));
     }
 
-    List<LocationDescription> CollectLocations()
+    List<GameLocation> CollectLocations()
     {
         CacheKnownLocations();
-        return new List<LocationDescription>(cachedLocations);
+        return new List<GameLocation>(cachedLocations);
     }
 
     string ExtractContent(Response response)
@@ -326,6 +332,7 @@ public class AgentIntelligence : MonoBehaviour
                 if (!string.IsNullOrWhiteSpace(text))
                 {
                     speechOutputs?.Add(text.Trim());
+                    chatManager?.ProximityChat(this, text.Trim());
                 }
 
                 continue;
@@ -455,6 +462,25 @@ public class AgentIntelligence : MonoBehaviour
         conversationHistory.Add(assistantMessage);
 
         TrimHistory();
+    }
+
+    public void ReceiveProximityChat(string speakerName, string message)
+    {
+        if (string.IsNullOrWhiteSpace(message))
+            return;
+
+        string normalizedSpeaker = string.IsNullOrWhiteSpace(speakerName) ? "Unknown" : speakerName.Trim();
+        string formattedMessage = $"{normalizedSpeaker}: {message.Trim()}";
+
+        conversationHistory.Add(new ResponseMessage(Role.User, formattedMessage));
+        TrimHistory();
+    }
+
+    void RegisterWithChatManager()
+    {
+        chatManager = ChatManager.Instance ?? FindFirstObjectByType<ChatManager>();
+        if (chatManager != null)
+            chatManager.RegisterAgent(this);
     }
 
     class AssistantOutputContent : BaseResponse, IResponseContent

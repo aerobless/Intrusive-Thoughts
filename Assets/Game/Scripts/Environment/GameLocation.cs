@@ -3,10 +3,13 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-public class LocationDescription : MonoBehaviour
+public class GameLocation : MonoBehaviour, IDescribable
 {
     [SerializeField, TextArea(5, 20)]
     public string description;
+
+    public string Description => description;
+    public string Name => name;
 
 #if UNITY_EDITOR
     [SerializeField, Min(0.1f)]
