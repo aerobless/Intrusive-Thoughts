@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1382581978340517284
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1611994175413412, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_Name
+      value: SM_Prop_CoffeeMachine_Dripper_01 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 1611994175413412, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1611994175413412, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525266720852922, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -18.172438
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525266720852922, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.94957304
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525266720852922, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 8.223591
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525266720852922, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525266720852922, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525266720852922, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525266720852922, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525266720852922, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525266720852922, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525266720852922, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1611994175413412, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3254375212881446437}
+  m_SourcePrefab: {fileID: 100100000, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+--- !u!1 &1381005168675617024 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1611994175413412, guid: 009d45b68d34dfa40ac80396a2978882, type: 3}
+  m_PrefabInstance: {fileID: 1382581978340517284}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3254375212881446437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381005168675617024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 199021fde9f1f4ab6bca199d6f6815e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable
+  description: A black coffee machine

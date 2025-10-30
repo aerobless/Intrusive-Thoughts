@@ -8,9 +8,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1254840078119496, guid: 2dcbd72587e28b644a827a45fc987b91, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1254840078119496, guid: 2dcbd72587e28b644a827a45fc987b91, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 1631404053280436, guid: 2dcbd72587e28b644a827a45fc987b91, type: 3}
       propertyPath: m_Name
       value: SM_Prop_Kitchen_CounterSink_01 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 1631404053280436, guid: 2dcbd72587e28b644a827a45fc987b91, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1631404053280436, guid: 2dcbd72587e28b644a827a45fc987b91, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1966110317320278, guid: 2dcbd72587e28b644a827a45fc987b91, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1966110317320278, guid: 2dcbd72587e28b644a827a45fc987b91, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4746167293817232, guid: 2dcbd72587e28b644a827a45fc987b91, type: 3}
       propertyPath: m_LocalPosition.x
@@ -55,5 +79,26 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1631404053280436, guid: 2dcbd72587e28b644a827a45fc987b91, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5658947780686962156}
   m_SourcePrefab: {fileID: 100100000, guid: 2dcbd72587e28b644a827a45fc987b91, type: 3}
+--- !u!1 &2884719192836161405 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1631404053280436, guid: 2dcbd72587e28b644a827a45fc987b91, type: 3}
+  m_PrefabInstance: {fileID: 2886067470195788233}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-5658947780686962156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2884719192836161405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 199021fde9f1f4ab6bca199d6f6815e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable
+  description: A kitchen sink
